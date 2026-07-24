@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="North Peak Digital - Data-Driven Digital Growth & Web Engineering Agency">
+  <title>North Peak Digital | Next-Gen Agency</title>
+
+  <style>
+    /* ==========================================================================
+       1. Design Tokens & Theme Reset
+       ========================================================================== */
+    :root {
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      --bg-dark: #07090e;
+      --bg-card: rgba(19, 24, 38, 0.7);
+      --bg-card-hover: rgba(30, 38, 59, 0.9);
+      --text-bright: #ffffff;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --accent: #8b5cf6;
+      --glow: rgba(59, 130, 246, 0.35);
+      --border: rgba(255, 255, 255, 0.1);
+      --radius: 16px;
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: var(--font-main);
+      background-color: var(--bg-dark);
+      color: var(--text-bright);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Ambient Background Glows */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -20%;
+      left: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--primary), transparent 70%);
+      opacity: 0.15;
+      filter: blur(100px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent), transparent 70%);
+      opacity: 0.15;
+      filter: blur(100px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Section Typography */
+    .section-title {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 30%, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      font-size: 1.1rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      box-shadow: 0 8px 25px var(--glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 35px rgba(139, 92, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Navigation Header */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(7, 9, 14, 0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span { color: var(--primary); }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover { color: #fff; }
+
+    /* Hero Section */
+    .hero {
+      padding: 100px 0 60px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3.8rem;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 50px;
+    }
+
+    /* Fixed Hero Animated Tech Showcase (Replaces broken video) */
+    .hero-tech-card {
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(19, 24, 38, 0.8), rgba(7, 9, 14, 0.9));
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      padding: 48px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-tech-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent 0 340deg, var(--primary) 360deg);
+      animation: rotateGlow 8s linear infinite;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .tech-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .tech-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid var(--primary);
+      color: #60a5fa;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* Interactive Image Slider Section */
+    .slider-section { padding: 80px 0; }
+
+    .slider-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 480px;
+      position: relative;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slide-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 40px;
+      background: linear-gradient(to top, rgba(7, 9, 14, 0.95), transparent);
+    }
+
+    .slide-caption h3 { font-size: 1.8rem; margin-bottom: 8px; }
+    .slide-caption p { color: var(--text-muted); }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(7, 9, 14, 0.8);
+      border: 1px solid var(--border);
+      color: #fff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+      z-index: 10;
+      font-size: 1.2rem;
+    }
+
+    .slider-btn:hover { background: var(--primary); border-color: var(--primary); }
+    .prev-btn { left: 20px; }
+    .next-btn { right: 20px; }
+
+    /* Photo Cards Showcase Grid */
+    .cards-section { padding: 80px 0; }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .photo-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .photo-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(139, 92, 246, 0.4);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    .card-image-box {
+      height: 220px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .photo-card:hover .card-image-box img { transform: scale(1.1); }
+    .card-body { padding: 24px; }
+    .card-body h3 { font-size: 1.3rem; margin-bottom: 10px; }
+    .card-body p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 16px; }
+
+    .card-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(59, 130, 246, 0.15);
+      color: var(--primary);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Services Grid */
+    .services { padding: 80px 0; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .service-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 36px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      backdrop-filter: blur(10px);
+    }
+
+    .service-box:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .service-box h3 { font-size: 1.3rem; margin-bottom: 12px; }
+    .service-box p { color: var(--text-muted); }
+
+    /* Pricing & Contact Form */
+    .pricing, .contact { padding: 80px 0; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
+    }
+
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-card.featured {
+      border-color: var(--primary);
+      box-shadow: 0 0 30px var(--glow);
+    }
+
+    .price-card h3 { font-size: 1.5rem; }
+    .price-card .price { font-size: 2.5rem; font-weight: 800; margin: 16px 0; }
+
+    .price-card ul {
+      list-style: none;
+      margin-bottom: 32px;
+      flex-grow: 1;
+    }
+
+    .price-card li {
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .price-card li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+    }
+
+    .contact-wrapper { max-width: 600px; margin: 0 auto; }
+
+    form {
+      background: var(--bg-card);
+      padding: 40px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .form-group { margin-bottom: 20px; }
+    form label { display: block; margin-bottom: 8px; font-weight: 500; }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(7, 9, 14, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    form input:focus, form textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .input-error { border-color: #ef4444 !important; }
+    .error-message { color: #ef4444; font-size: 0.85rem; margin-top: 6px; display: block; }
+    .success-message { color: #10b981; font-weight: 600; text-align: center; margin-top: 16px; }
+
+    /* Footer with Mandatory Credit */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    footer a { color: var(--primary); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .nav-links { display: none; }
+      .slide { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo">North Peak<span>.</span></a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#slider">Showcase</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#works">AI Work</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact" class="btn btn-secondary">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>Engineering High-Converting <span>Digital Products</span></h1>
+      <p>We craft high-performance web applications, AI integration suites, and scalable e-commerce infrastructure.</p>
+      
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">Start Your Project</a>
+        <a href="#slider" class="btn btn-secondary">Explore Showcase</a>
+      </div>
+
+      <!-- Animated Hero Showcase Card -->
+      <div class="hero-tech-card">
+        <div class="tech-inner">
+          <span class="tech-badge">⚡ Sub-Second Load Speeds Guaranteed</span>
+          <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 8px;">Next-Gen Web & AI Engineering</h2>
+          <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Optimized for Lighthouse 90+ Core Web Vitals, conversion architecture, and dynamic design systems.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Image Slider Section -->
+  <section id="slider" class="slider-section">
+    <div class="container">
+      <h2 class="section-title">Featured Innovations</h2>
+      <p class="section-subtitle">Swipe through our high-impact AI and digital web architectures</p>
+      
+      <div class="slider-wrapper">
+        <button class="slider-btn prev-btn" id="prevBtn">&#10094;</button>
+        <button class="slider-btn next-btn" id="nextBtn">&#10095;</button>
+        
+        <div class="slider-track" id="sliderTrack">
+          <div class="slide">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" alt="Cyber Mesh UI">
+            <div class="slide-caption">
+              <h3>Cyber Analytics Engine</h3>
+              <p>Real-time data visualization platforms built for speed.</p>
+            </div>
+          </div>
+          <div class="slide">
+            <img src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=1200&q=80" alt="3D Interface">
+            <div class="slide-caption">
+              <h3>Interactive Spatial Interfaces</h3>
+              <p>Web3 and 3D web applications engineered with WebGL.</p>
+            </div>
+          </div>
+          <div class="slide">
+            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=1200&q=80" alt="Neural Canvas">
+            <div class="slide-caption">
+              <h3>Neural Generative Design</h3>
+              <p>Automated design systems powered by intelligent algorithms.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Photo Cards Showcase -->
+  <section id="works" class="cards-section">
+    <div class="container">
+      <h2 class="section-title">AI Portfolio Showcase</h2>
+      <p class="section-subtitle">Hover over the cards to inspect our design detail</p>
+      
+      <div class="cards-grid">
+        <div class="photo-card">
+          <div class="card-image-box">
+            <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?auto=format&fit=crop&w=600&q=80" alt="Abstract Fluid AI">
+          </div>
+          <div class="card-body">
+            <span class="card-tag">AI Visuals</span>
+            <h3>Fluid Dynamic Engine</h3>
+            <p>Responsive fluid physics simulation rendered directly on canvas.</p>
+          </div>
+        </div>
+
+        <div class="photo-card">
+          <div class="card-image-box">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80" alt="Retro Tech Hardware">
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Hardware UI</span>
+            <h3>Embedded Dashboards</h3>
+            <p>Low-latency monitoring software for enterprise systems.</p>
+          </div>
+        </div>
+
+        <div class="photo-card">
+          <div class="card-image-box">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Matrix Cyber Code">
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Security</span>
+            <h3>Zero-Trust Architecture</h3>
+            <p>Cryptographic validation engines with web interfaces.</p>
+          </div>
+        </div>
+
+        <div class="photo-card">
+          <div class="card-image-box">
+            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=600&q=80" alt="Design System Workstation">
+          </div>
+          <div class="card-body">
+            <span class="card-tag">Design System</span>
+            <h3>Bespoke UI Frameworks</h3>
+            <p>Custom component suites optimized for conversion.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 Services Grid -->
+  <section id="services" class="services">
+    <div class="container">
+      <h2 class="section-title">Core Capabilities</h2>
+      <p class="section-subtitle">Comprehensive engineering for modern digital brands</p>
+      
+      <div class="services-grid">
+        <div class="service-box">
+          <h3>Custom Web Engineering</h3>
+          <p>Hand-crafted web applications tuned for extreme performance and sub-second load times.</p>
+        </div>
+        <div class="service-box">
+          <h3>E-commerce Systems</h3>
+          <p>Scalable online stores with frictionless checkout flows and headless architecture options.</p>
+        </div>
+        <div class="service-box">
+          <h3>UI/UX Design Systems</h3>
+          <p>Accessible, responsive user interface design built around human interaction patterns.</p>
+        </div>
+        <div class="service-box">
+          <h3>CRO Engineering</h3>
+          <p>Data-backed A/B testing and algorithmic conversion rate optimization.</p>
+        </div>
+        <div class="service-box">
+          <h3>Technical SEO</h3>
+          <p>Semantic markup and structural optimizations engineered for AI search and indexing.</p>
+        </div>
+        <div class="service-box">
+          <h3>Performance Optimization</h3>
+          <p>Core Web Vitals tuning guaranteeing 90+ Lighthouse scores across all devices.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="pricing">
+    <div class="container">
+      <h2 class="section-title">Transparent Pricing</h2>
+      <p class="section-subtitle">Scalable investment tiers for companies of all sizes</p>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="price">$2,499</div>
+          <ul>
+            <li>Single-page responsive build</li>
+            <li>Core SEO optimization</li>
+            <li>Sub-second load speed</li>
+          </ul>
+          <a href="#contact" class="btn btn-secondary">Select Plan</a>
+        </div>
+        <div class="price-card featured">
+          <h3>Growth</h3>
+          <div class="price">$4,999</div>
+          <ul>
+            <li>Full multi-page web application</li>
+            <li>Custom headless CMS integration</li>
+            <li>Advanced analytics suite</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary">Select Plan</a>
+        </div>
+        <div class="price-card">
+          <h3>Enterprise</h3>
+          <div class="price">Custom</div>
+          <ul>
+            <li>Bespoke platform architecture</li>
+            <li>Dedicated engineering team</li>
+            <li>24/7 SLA & maintenance</li>
+          </ul>
+          <a href="#contact" class="btn btn-secondary">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form -->
+  <section id="contact" class="contact">
+    <div class="container contact-wrapper">
+      <h2 class="section-title">Start Your Project</h2>
+      <p class="section-subtitle">Let's discuss how we can scale your web presence</p>
+
+      <form id="contactForm" novalidate>
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" required aria-required="true">
+          <span class="error-message" id="nameError"></span>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required aria-required="true">
+          <span class="error-message" id="emailError"></span>
+        </div>
+        <div class="form-group">
+          <label for="message">Project Details</label>
+          <textarea id="message" rows="4" required aria-required="true"></textarea>
+          <span class="error-message" id="messageError"></span>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
+        <div id="formSuccess" class="success-message"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer with Mandatory Credit -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 North Peak Digital. All rights reserved.</p>
+      <p style="margin-top: 8px;">Built for <a href="https://digitalheroesco.com" target="_blank" rel="noopener noreferrer">Digital Heroes Training Task</a></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript for Slider & Form Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Image Slider Logic
+      const track = document.getElementById('sliderTrack');
+      const slides = document.querySelectorAll('.slide');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      let currentIndex = 0;
+
+      const updateSlider = () => {
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      };
+
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateSlider();
+      });
+
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateSlider();
+      });
+
+      // Auto-slide every 5 seconds
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateSlider();
+      }, 5000);
+
+      // 2. Client-Side Form Validation
+      const form = document.getElementById('contactForm');
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const messageInput = document.getElementById('message');
+      const successMsg = document.getElementById('formSuccess');
+
+      const showError = (input, errorEl, message) => {
+        input.classList.add('input-error');
+        errorEl.textContent = message;
+      };
+
+      const clearError = (input, errorEl) => {
+        input.classList.remove('input-error');
+        errorEl.textContent = '';
+      };
+
+      const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      };
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let isValid = true;
+
+        if (nameInput.value.trim() === '') {
+          showError(nameInput, document.getElementById('nameError'), 'Name is required.');
+          isValid = false;
+        } else {
+          clearError(nameInput, document.getElementById('nameError'));
+        }
+
+        if (emailInput.value.trim() === '') {
+          showError(emailInput, document.getElementById('emailError'), 'Email is required.');
+          isValid = false;
+        } else if (!validateEmail(emailInput.value.trim())) {
+          showError(emailInput, document.getElementById('emailError'), 'Enter a valid email address.');
+          isValid = false;
+        } else {
+          clearError(emailInput, document.getElementById('emailError'));
+        }
+
+        if (messageInput.value.trim() === '') {
+          showError(messageInput, document.getElementById('messageError'), 'Message cannot be empty.');
+          isValid = false;
+        } else {
+          clearError(messageInput, document.getElementById('messageError'));
+        }
+
+        if (isValid) {
+          successMsg.textContent = "Thank you! Your message has been sent successfully.";
+          form.reset();
+          setTimeout(() => { successMsg.textContent = ''; }, 5000);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
